@@ -44,13 +44,13 @@ L'implémentation fallacieuse d'OpenSSL utilise une structure de données ressem
 
 % from http://www.theregister.co.uk/2014/04/09/heartbleed_explained/
 
-	\begin{lstlisting}[language=C]
-		struct {
-			// d'autres champs ne nous interessant pas sont presents
-			uint16 payload_length;
-			opaque payload[HeartbeatMessage.payload_length];
-		} HeartbeatMessage;
-	\end{lstlisting}
+\begin{lstlisting}[language=C]
+struct {
+	// d'autres champs ne nous interessant pas sont presents
+	uint16 payload_length;
+	opaque payload[HeartbeatMessage.payload_length];
+} HeartbeatMessage;
+\end{lstlisting}
 
 Le \texttt{payload} est le paquet de données à renvoyer, \texttt{payload\_length} est le volume de ces données. Le code créant la réponse à ce heartbeat ressemble au suivant~:
 
