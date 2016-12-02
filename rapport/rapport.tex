@@ -10,10 +10,11 @@
 \usepackage[french]{babel}
 \usepackage{multicol}
 \usepackage{geometry}
+\usepackage{listings}
 
 \usepackage[utf8]{inputenc}
 
-\geometry{hmargin=2.5cm,vmargin=1.5cm}
+\geometry{hmargin=2.5cm,vmargin=2.5cm}
 
 \title{\Huge{Introduction à la sécurité des systèmes d'information}\\
 TP Faille de sécurité}
@@ -21,9 +22,49 @@ TP Faille de sécurité}
 
 \begin{document}
 
+\maketitle
+\newpage
+
+\section{Introduction}
+Heartbleed est une faille de sécurité découverte en mars 2014 par un ingénieur de Google Security (Neel Mehta) et la société Codenomicon, de façon indépendante. Présente depuis décembre 2011, elle affectait environ 17\% des serveurs webs utilisant HTTPS (environ 500.000 machines) au moment de sa découverte.
+
+Corrigée et rendue publique en avril 2014, cette faille permettait l'accès à l'intégralité des données d'un service web: identifiants utilisateurs, contenu du service...
+
 % Indiquer quel est le service ou le programme compromis, quel est le type de compromission
 % Expliquer la vulnérabilité, décrire le mécanisme permettant de l'exploiter
 % Cette faille concerne-t-elle des machines clientes ou des machines serveurs ?
+\section{Compromission}
+Cette faille repose sur une erreur d'implémentation dans la librairie de chiffrement OpenSSL, utilisée par près des deux tiers des sites web. Ainsi, tous les sites web utilisant une version d'OpenSSL incluse entre 1.0.1 et 1.0.1f sont vulnérables à cette attaque.
+
+\subsection{Exploit}
+\subsubsection{Source du bug}
+Le bug réside dans l'implémentation du "TLS Heartbeat". Un heartbeat est une fonctionnalité simple permettant de vérifier que les deux protagonistes du protocole (client et serveur) sont toujours vivants ("keep-alive")~: un côté envoie un paquet de données arbitraire, dont la longueur est annoncée, que l'autre côté devra renvoyer tel quel pour prouver qu'il est toujours vivant et bien fonctionnel.
+
+L'implémentation fallacieuse d'OpenSSL utilise une structure de données ressemblant à la suivante~:
+
+% from http://www.theregister.co.uk/2014/04/09/heartbleed_explained/
+
+	\begin{lstlisting}[language=C]
+		struct {
+			// d'autres champs ne nous interessant pas sont presents
+			uint16 payload_length;
+			opaque payload[HeartbeatMessage.payload_length];
+		} HeartbeatMessage;
+	\end{lstlisting}
+
+Le \texttt{payload} est le paquet de données à renvoyer, \texttt{payload\_length} est le volume de ces données. Le code créant la réponse à ce heartbeat ressemble au suivant~:
+
+\begin{lstlisting}[language=C]
+/* Entree~: hbRequest, le HeartbeatMessage recu auquel on veut repondre */
+Heartbeat hbResponse;
+hbResponse.payload_length = hbRequest.payload_length;
+memcpy(hbResponse.payload, hbRequest.payload, hbRequest.payload_length);
+\end{lstlisting}
+
+On note qu'à aucun moment n'est vérifié la taille effective de \texttt{hbRequest.payload}, qui peut être différente de celle indiqué par \texttt{hbRequest.payload\_length} (cette dernière étant arbitrairement fixée par l'émetteur).
+
+\subsubsection{Exploitation du bug}
+Le bug exposé ci-dessus peut être facilement exploité pour obtenir des fragments de mémoire d'un serveur utilisant OpenSSL.
 
 % Décrire une architecture typique du système d’information qui pourrait être impliquée dans l’exploitation de ces failles. Cela peut prendre la forme d’un schéma où sont décrits : les services mis en oeuvre, les machines concernées (clients et serveurs), les équipements réseaux, les réseaux d’interconnexion.
 
@@ -40,10 +81,8 @@ TP Faille de sécurité}
 %Document PDF sur Teide avec les éléments décrits dans la partie évaluation
 %Lien vers l'image de la machine virtuelle créée pour l'expérimentation, ou DockerFile + scripts si suffisant
 
-\maketitle
 
-
-Notre sujet : http://heartbleed.com/
+%Notre sujet : http://heartbleed.com/
 
 
 
