@@ -1,0 +1,41 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+Vagrant.configure("2") do |config|
+  
+
+  # Some optimizations
+  config.vm.provider "virtualbox" do |v|
+    v.linked_clone = true
+    v.memory = 512
+    v.cpus = 1
+    v.customize ["modifyvm", :id, "--usb", "on"]
+    v.customize ["modifyvm", :id, "--usbehci", "off"]
+  end
+
+  config.vm.box_check_update = false
+
+  config.vm.define "server" do |server|
+    server.vm.box = "hashicorp/precise64"
+    server.vm.box_check_update = false
+    server.vm.network "forwarded_port", guest: 80, host: 13080
+    server.vm.network "forwarded_port", guest: 443, host: 13443
+    server.vm.provision "shell", inline: <<-SHELL
+       sudo apt-get --assume-yes install apache2
+       sudo a2enmod ssl
+       sudo a2ensite default-ssl
+       sudo make-ssl-cert generate-default-snakeoil --force-overwrite
+       sudo service apache2 restart
+    SHELL
+  end
+
+  config.vm.define "client" do |client|
+    client.vm.box = "danilonc/kali"
+    client.vm.box_check_update = false
+
+
+    client.vm.provision "shell", inline: <<-SHELL
+    SHELL
+  end
+
+end
