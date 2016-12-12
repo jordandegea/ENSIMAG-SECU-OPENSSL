@@ -23,7 +23,6 @@ TP Faille de sécurité}
 \begin{document}
 
 \maketitle
-\newpage
 
 \section{Introduction}
 Heartbleed est une faille de sécurité découverte en mars 2014 par un ingénieur de Google Security (Neel Mehta) et la société Codenomicon, de façon indépendante. Présente depuis décembre 2011, elle affectait environ 17\% des serveurs webs utilisant HTTPS (environ 500.000 machines) au moment de sa découverte.
@@ -119,7 +118,7 @@ set RPORT 13443\\
 set verbose true\\
 run\\
 
-On peut voir des informations récupérées, dans la catégorie "Printable info leaked". Avec des outils plus poussés et de nombreuses requetes, il est possible de récupérer la clef privée. 
+On peut voir des informations récupérées, dans la catégorie "Printable info leaked". Avec des outils plus poussés et de nombreuses requêtes, il est possible de récupérer la clef privée. 
 
 % outil plus puissant à installer sur kali : https://github.com/robertdavidgraham/heartleech
 
@@ -128,10 +127,18 @@ On peut voir des informations récupérées, dans la catégorie "Printable info 
 
 \section{Glossaire}
 
+vagrant : Vagrant est un logiciel libre et open-source pour la création et la configuration des environnements de développement virtuel. 
+
+
 \section{Références}
 % Joindre au devoir un glossaire des termes utilisés
 % Joindre au devoir l'ensemble des références utilisées
 
+\href{http://heartbleed.com/}{http://heartbleed.com/}
+
+\href{https://fr.wikipedia.org/wiki/Heartbleed}{https://fr.wikipedia.org/wiki/Heartbleed}
+
+\href{https://sathisharthars.wordpress.com/2014/06/10/exploit-heartbleed-openssl-vulnerability-using-kali-linux/}{https://sathisharthars.wordpress.com/2014/06/10/exploit-heartbleed-openssl-vulnerability-using-kali-linux/}
 
 %Document PDF sur Teide avec les éléments décrits dans la partie évaluation
 %Lien vers l'image de la machine virtuelle créée pour l'expérimentation, ou DockerFile + scripts si suffisant
