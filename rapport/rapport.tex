@@ -11,6 +11,8 @@
 \usepackage{multicol}
 \usepackage{geometry}
 \usepackage{listings}
+\usepackage{glossaries}
+\makeglossaries
 
 \usepackage[utf8]{inputenc}
 
@@ -37,7 +39,7 @@ Cette faille repose sur une erreur d'implémentation dans la librairie de chiffr
 
 \subsection{Exploit}
 \subsubsection{Source du bug}
-Le bug réside dans l'implémentation du "TLS Heartbeat". Un heartbeat est une fonctionnalité simple permettant de vérifier que les deux protagonistes du protocole (client et serveur) sont toujours vivants ("keep-alive")~: un côté envoie un paquet de données arbitraire, dont la longueur est annoncée, que l'autre côté devra renvoyer tel quel pour prouver qu'il est toujours vivant et bien fonctionnel.
+Le bug réside dans l'implémentation du "TLS Heartbeat". Un heartbeat est une fonctionnalité simple permettant de vérifier que les deux protagonistes du protocole (client et serveur) sont toujours vivants ("keep-alive")~: un tiers envoie un paquet de données arbitraire, dont la longueur est annoncée, que l'autre tiers devra renvoyer tel quel pour prouver qu'il est toujours vivant et bien fonctionnel.
 
 L'implémentation fallacieuse d'OpenSSL utilise une structure de données ressemblant à la suivante~:
 
@@ -80,14 +82,14 @@ Client : Telnet \\
 
 \subsection{Après une attaque}
 
-Après une attaque, tous les éléments sécurisés par le clef récupéré peuvent être lu. Afin de ne pas compromettre de nouveaux messages, il est impératif de révoqué les anciennes clef et d'en recréer de nouvelles. 
+Après une attaque, tous les éléments sécurisés par la clef récupérée peuvent être lus. Afin de ne pas compromettre de nouveaux messages, il est impératif de révoquer les anciennes clefs et d'en recréer de nouvelles. 
 
 \subsection{Dès connaissance de la faille de sécurité}
-How can OpenSSL be fixed?
-Avant la correction de cette faille de sécurite, il était possible de fermet cette faille. 
+Comment corriger OpenSSL?\\
+Avant la correction de cette faille de sécurité, il était possible de corriger cette faille. 
 \begin{itemize}
-	\item Pour les experts, analyser le code permettait de trouver facilement la faille et la ferme. 
-	\item pour les autres, recompiler le code d'OPENSSL en ajoutant l'option: \textit{-DOPENSSL\_NO\_HEARTBEATS}
+	\item Pour les experts, analyser le code permettait de trouver facilement la faille et la corriger. 
+	\item pour les autres, il suffisait de recompiler le code d'OPENSSL en ajoutant l'option: \textit{-DOPENSSL\_NO\_HEARTBEATS}
 \end{itemize}
 
 
@@ -133,7 +135,10 @@ On voit que cet exploit nous permet de récupérer automatiquement et particuli�
 
 \section{Glossaire}
 
-vagrant : Vagrant est un logiciel libre et open-source pour la création et la configuration des environnements de développement virtuel. 
+vagrant : Vagrant est un logiciel libre et open-source pour la création et la configuration des environnements de développement virtuel. \\
+OpenSSL : OpenSSL est une boîte à outils de chiffrement comportant deux bibliothèques (libcrypto fournit les algorithmes cryptographiques, libssl implémente le protocole Transport Layer Security (TLS) ainsi que son prédécesseur Secure Sockets Layer (SSL)) et une interface en ligne de commande (openssl). \\
+payload : En français "Charge Utile". C'est le message utile envoyé (seulement la partie exclue de tout header ou méta-données utilisées par le protocole. \\
+exploit : élément de programme permettant à un individu ou à un logiciel malveillant d'exploiter une faille de sécurité informatique \\
 
 
 \section{Références}
